@@ -18,8 +18,10 @@ export function viewToPosition(v) {
 
 export function readView(camera, target) {
   const r = camera.position.length();
-  let phi = Math.atan(camera.position.z / camera.position.x);
-  if (phi < -0.5) phi += Math.PI;
+  // atan2 recovers phi over the full (-pi, pi] range directly (since
+  // x = k*cos(phi), z = k*sin(phi) with k = r*sin(azi) >= 0), including the
+  // pole (x=0, z=0) where atan2(0, 0) is defined as 0 rather than NaN.
+  const phi = Math.atan2(camera.position.z, camera.position.x);
   return {
     azi: Math.acos(camera.position.y / r),
     phi,

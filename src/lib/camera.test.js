@@ -32,6 +32,27 @@ describe('readView', () => {
   });
 });
 
+describe('readView pole and quadrant cases', () => {
+  it('returns finite azi and phi at the pole (x=0, z=0)', () => {
+    const r = widthToRadius(0.1, 50);
+    const fake = { position: { x: 0, y: r, z: 0, length: () => r }, fov: 0.1 };
+    const back = readView(fake, { x: 0, y: 0, z: 0 });
+    expect(Number.isFinite(back.azi)).toBe(true);
+    expect(Number.isFinite(back.phi)).toBe(true);
+    expect(back.azi).toBeCloseTo(0, 3);
+  });
+
+  it('inverts viewToPosition for a quadrant view with x<0 (phi > pi/2)', () => {
+    const view = { azi: 1.1, phi: 1.613071831, fov: 30, width: 60, lookat_x: 0, lookat_y: 0, lookat_z: 0 };
+    const p = viewToPosition(view);
+    expect(p.x).toBeLessThan(0);
+    const fake = { position: { x: p.x, y: p.y, z: p.z, length: () => Math.hypot(p.x, p.y, p.z) }, fov: 30 };
+    const back = readView(fake, { x: 0, y: 0, z: 0 });
+    expect(back.azi).toBeCloseTo(1.1, 3);
+    expect(back.phi).toBeCloseTo(1.613071831, 3);
+  });
+});
+
 describe('tweenView', () => {
   it('ends exactly at target and calls onDone', async () => {
     const from = { azi: 0, phi: 0, fov: 30, width: 40, lookat_x: 0, lookat_y: 0, lookat_z: 0 };
