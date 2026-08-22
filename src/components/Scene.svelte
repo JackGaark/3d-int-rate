@@ -3,6 +3,7 @@
   import * as THREE from 'three';
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
   import { buildSurface } from '../lib/surface.js';
+  import { buildOverlays } from '../lib/overlays.js';
   import { viewToPosition } from '../lib/camera.js';
   import { SCENES } from '../lib/scenes.js';
 
@@ -33,8 +34,10 @@
   export function getCamera() { return { camera, controls }; }
   export function getScene() { return scene; }
   export function getSurfaceMesh() { return surfaceMesh; }
+  export function getOverlays() { return overlays; }
 
   let surfaceMesh;
+  let overlays;
 
   onMount(() => {
     const aspect = 1.8;
@@ -57,6 +60,12 @@
     geo.computeVertexNormals();
     surfaceMesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide }));
     scene.add(surfaceMesh);
+
+    overlays = buildOverlays(rows, scales);
+    Object.values(overlays.groups).flat().forEach((l) => scene.add(l));
+    overlays.axes.forEach((l) => scene.add(l));
+    scene.add(overlays.highlight.last);
+    overlays.highlight.products.forEach((l) => scene.add(l));
 
     applyView(SCENES[0].view);
 
