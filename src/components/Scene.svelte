@@ -85,6 +85,7 @@
   });
 
   onDestroy(() => {
+    if (frame) cancelAnimationFrame(frame);
     controls?.dispose();
     renderer?.dispose();
     scene?.traverse((o) => { o.geometry?.dispose(); o.material?.dispose(); });

@@ -1,4 +1,5 @@
 <script>
+  import { onDestroy } from 'svelte';
   import * as THREE from 'three';
   import { readView } from '../lib/camera.js';
 
@@ -36,6 +37,8 @@
       });
     }, 200);
   }
+
+  onDestroy(() => clearTimeout(occludeTimer));
 </script>
 
 <div class="labels" bind:this={root}>
