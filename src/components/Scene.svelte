@@ -6,8 +6,13 @@
   import { buildOverlays } from '../lib/overlays.js';
   import { viewToPosition } from '../lib/camera.js';
   import { SCENES } from '../lib/scenes.js';
+  import Labels from './Labels.svelte';
+  import { makeLabelDefs } from '../lib/labels.js';
 
-  let { rows, scales, onrender = () => {} } = $props();
+  let { rows, scales, onrender = () => {}, hiddenAxes = [] } = $props();
+
+  const labelDefs = $derived(makeLabelDefs(rows, scales));
+  let labelsComp;
 
   let container;
   let renderer, scene, camera, controls, frame = null;
@@ -19,6 +24,7 @@
 
   function render() {
     renderer.render(scene, camera);
+    labelsComp?.update(camera, controls, surfaceMesh);
     onrender({ camera, controls });
   }
 
@@ -85,7 +91,9 @@
   });
 </script>
 
-<div class="scene" bind:this={container}></div>
+<div class="scene" bind:this={container}>
+  <Labels bind:this={labelsComp} defs={labelDefs} {hiddenAxes} />
+</div>
 
 <style>
   .scene { width: 100%; position: relative; }
