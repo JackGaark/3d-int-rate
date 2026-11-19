@@ -701,7 +701,7 @@ export const SCENES = [
 </script>
 
 <main>
-  <h1>A 3-D Tour of the Yield Curve</h1>
+  <h1>A 3-D Yield Curve</h1>
   {#if rows}
     <Scene {rows} {scales} />
   {/if}
@@ -1175,7 +1175,7 @@ Markup below the script:
 
 ```svelte
 <main>
-  <h1>A 3-D Tour of the Yield Curve</h1>
+  <h1>A 3-D Yield Curve</h1>
   {#if rows}
     <div class="stage">
       <Scene bind:this={sceneComp} {rows} {scales} {hiddenAxes} />

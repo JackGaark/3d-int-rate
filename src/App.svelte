@@ -75,7 +75,7 @@
 </script>
 
 <main>
-  <h1>A 3-D Tour of the Yield Curve</h1>
+  <h1>A 3-D Yield Curve</h1>
   {#if rows}
     <div class="stage">
       <Scene bind:this={sceneComp} {rows} {scales} {hiddenAxes} />
